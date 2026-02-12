@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { JsonWebTokenError } from 'jsonwebtoken'; 
+import jwt from 'jsonwebtoken';
+import userModel from '../models/userModel.js';
 
 export const register = async(req,res)=>{
     const {name, email, password} = req.body;
@@ -19,7 +20,7 @@ export const register = async(req,res)=>{
         const newUser = new userModel({name, email, password: hashedPassword});
         await newUser.save();
 
-        const token = JsonWebTokenError.sign({id: newUser._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
 
         res.cookie('token', token, {
             httpOnly: true,
@@ -28,8 +29,10 @@ export const register = async(req,res)=>{
             maxAge: 7*24*60*60*1000, // expiration for 7 days
         } ) 
 
+        return res.json({ success: true, message: 'Registration successful' });
+
     }catch(error){
-        res.json({success: false, message: error.message})
+        return res.json({success: false, message: error.message})
     }
 }
 
@@ -50,7 +53,7 @@ export const login = async(req,res)=>{
         if(!isMatch){
             return res.json({success:false, message: "Invalid credentials"})
         }
-        const token = JsonWebTokenError.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '1d'});
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
         
         res.cookie('token', token, {
             httpOnly: true,

@@ -7,12 +7,16 @@ const CourseSection = () => {
   const featured = dummyCourses.slice(0, 4);
 
   return (
-    <section className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Featured Courses</h2>
-          <p className="mt-3 text-gray-500 max-w-xl mx-auto">
-            Learn from industry experts with our top-rated courses
+    <section className="section bg-white">
+      <div className="container-base">
+        <div className="mb-12 text-center">
+          <span className="pill">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+            Featured
+          </span>
+          <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-slate-900">Featured Courses</h2>
+          <p className="mt-3 text-slate-600 max-w-xl mx-auto">
+            Learn from industry experts with our top-rated courses.
           </p>
         </div>
 
@@ -25,7 +29,7 @@ const CourseSection = () => {
         <div className="text-center mt-10">
           <Link
             to="/offered-course"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-[#1A1B24] border border-[#1A1B24]/20 hover:bg-[#1A1B24]/5 rounded-full transition-all duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-slate-900 border-2 border-slate-900 hover:bg-[#B7FA66] rounded-full transition-all duration-200"
           >
             View All Courses
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

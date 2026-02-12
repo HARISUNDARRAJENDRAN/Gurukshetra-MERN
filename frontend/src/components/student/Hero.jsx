@@ -12,12 +12,6 @@ const Hero = () => {
   const [showButtons, setShowButtons] = useState(false);
   const [motionEnabled, setMotionEnabled] = useState(true);
 
-  const roadmap = [
-    { title: 'Foundations', progress: 80 },
-    { title: 'Projects', progress: 55 },
-    { title: 'Interview Prep', progress: 35 },
-  ];
-
   const quickStats = [
     { label: 'Completion', value: '87%' },
     { label: 'Learners', value: '24k+' },
@@ -71,93 +65,58 @@ const Hero = () => {
         </div>
       )}
 
-      <div className="relative z-10 container-base grid items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] pb-16">
-        <div className="text-center lg:text-left">
-          <span className="pill">New · Personal Learning OS</span>
+      <div className="relative z-10 container-base flex flex-col items-center justify-center pb-16 text-center">
+        <span className="pill">
+          <span className="h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+          New · Personal Learning OS
+        </span>
 
-          <h1 className="mt-5 text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight text-slate-900">
-            <span className="gradient-text">{displayedText}</span>
-            <span className={`${typingDone ? 'hidden' : 'inline-block'} animate-blink text-slate-900 ml-0.5`}>|</span>
-            <span className="block mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold text-slate-800">
-              Build skills faster with focused, guided roadmaps.
-            </span>
-          </h1>
+        <h1 className="mt-6 text-5xl sm:text-6xl md:text-7xl font-extrabold leading-tight text-slate-900">
+          <span className="gradient-text">{displayedText}</span>
+          <span className={`${typingDone ? 'hidden' : 'inline-block'} animate-blink text-slate-900 ml-0.5`}>|</span>
+          <span className="block mt-4 text-2xl sm:text-3xl md:text-4xl font-semibold text-slate-800">
+            Build skills faster with focused, guided roadmaps.
+          </span>
+        </h1>
 
-          <p
-            className={`mt-6 text-lg text-slate-600 max-w-xl mx-auto lg:mx-0 transition-all duration-500 ease-out ${
-              showSubtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+        <p
+          className={`mt-6 text-lg text-slate-600 max-w-2xl transition-all duration-500 ease-out ${
+            showSubtitle ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          A calm, distraction‑free LMS that turns courses into outcomes: clear paths, consistent momentum, and{' '}
+          <span className="rounded-md bg-[#B7FA66]/35 px-2 py-0.5 text-slate-900">proof‑of‑skill projects</span>.
+        </p>
+
+        <div
+          className={`mt-9 flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-500 ease-out ${
+            showButtons ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
+          }`}
+        >
+          <Link
+            to="/offered-course"
+            className="px-8 py-3 text-base font-semibold text-white bg-[#1A1B24] hover:bg-[#11121a] rounded-full transition-all duration-200 shadow-[var(--shadow-soft)] hover:shadow-lg"
           >
-            A calm, distraction‑free LMS that turns courses into outcomes: clear paths, consistent momentum, and proof‑of‑skill projects.
-          </p>
-
-          <div
-            className={`mt-9 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 transition-all duration-500 ease-out ${
-              showButtons ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-            }`}
+            Explore Courses
+          </Link>
+          <Link
+            to="/prof"
+            className="px-8 py-3 text-base font-semibold text-slate-700 border border-slate-200 bg-white/70 hover:border-[#1A1B24] hover:text-[#1A1B24] rounded-full transition-all duration-200"
           >
-            <Link
-              to="/offered-course"
-              className="px-8 py-3 text-base font-semibold text-white bg-[#1A1B24] hover:bg-[#11121a] rounded-full transition-all duration-200 shadow-[var(--shadow-soft)] hover:shadow-lg"
-            >
-              Explore Courses
-            </Link>
-            <Link
-              to="/prof"
-              className="px-8 py-3 text-base font-semibold text-slate-700 border border-slate-200 bg-white/70 hover:border-[#1A1B24] hover:text-[#1A1B24] rounded-full transition-all duration-200"
-            >
-              Start Teaching
-            </Link>
-          </div>
-
-          <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-4 text-left">
-            {quickStats.map((stat) => (
-              <div key={stat.label} className="card px-4 py-3">
-                <div className="text-lg font-semibold text-slate-900">{stat.value}</div>
-                <div className="text-xs uppercase tracking-wide text-slate-500">{stat.label}</div>
-              </div>
-            ))}
-          </div>
+            Start Teaching
+          </Link>
         </div>
 
-        <div className="relative">
-          <div className="absolute -inset-6 rounded-[32px] bg-gradient-to-br from-slate-200/40 via-white/10 to-slate-300/40 blur-2xl" />
-          <div className="relative card-strong p-6 md:p-7">
-            <div className="flex items-center justify-between">
-              <div className="text-xs font-semibold uppercase tracking-widest text-slate-500">Weekly Sprint</div>
-              <div className="pill bg-white/80">Week 2 / 6</div>
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4 text-xs uppercase tracking-widest text-slate-500">
+          {quickStats.map((stat, index) => (
+            <div key={stat.label} className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-slate-900">{stat.value}</span>
+              <span>{stat.label}</span>
+              {index < quickStats.length - 1 && (
+                <span className="hidden sm:inline-flex h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+              )}
             </div>
-
-            <div className="mt-6 space-y-4">
-              {roadmap.map((item) => (
-                <div key={item.title}>
-                  <div className="flex items-center justify-between text-sm font-medium text-slate-700">
-                    <span>{item.title}</span>
-                    <span className="text-slate-500">{item.progress}%</span>
-                  </div>
-                  <div className="mt-2 h-2 rounded-full bg-slate-100">
-                    <div
-                      className="h-2 rounded-full bg-gradient-to-r from-slate-900 via-slate-700 to-slate-500"
-                      style={{ width: `${item.progress}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              {['Daily Focus', 'Practice Labs', 'Mentor Notes'].map((label) => (
-                <div key={label} className="rounded-2xl border border-slate-100 bg-white px-3 py-2 text-xs font-semibold text-slate-600">
-                  {label}
-                </div>
-              ))}
-            </div>
-
-            <div className="mt-6 flex items-center gap-3 rounded-2xl border border-slate-100 bg-white px-4 py-3 text-sm text-slate-600">
-              <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              3 live cohorts starting this month
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

@@ -20,7 +20,7 @@ const CourseCard = ({ course }) => {
   return (
     <Link
       to={`/course/${course._id}`}
-      className="group bg-white border border-gray-100 rounded-xl overflow-hidden hover:shadow-lg transition-shadow duration-300"
+      className="group bg-white border-2 border-slate-900 rounded-2xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)]"
     >
       {/* Thumbnail */}
       <div className="relative aspect-video overflow-hidden bg-gray-100">
@@ -33,7 +33,7 @@ const CourseCard = ({ course }) => {
           loading="lazy"
         />
         {course.discount > 0 && (
-          <span className="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+          <span className="absolute top-3 left-3 bg-[#B7FA66] text-slate-900 text-xs font-bold px-2 py-1 rounded-full border border-slate-900">
             {course.discount}% OFF
           </span>
         )}
@@ -41,15 +41,15 @@ const CourseCard = ({ course }) => {
 
       {/* Content */}
       <div className="p-4">
-        <h3 className="text-base font-semibold text-gray-900 line-clamp-2 group-hover:text-[#1A1B24] transition-colors duration-200">
+        <h3 className="text-base font-semibold text-slate-900 line-clamp-2 group-hover:text-slate-900 transition-colors duration-200">
           {course.courseTitle}
         </h3>
 
-        <p className="text-xs text-gray-400 mt-1">{totalLectures} lectures</p>
+        <p className="text-xs text-slate-500 mt-1">{totalLectures} lectures</p>
 
         {/* Rating */}
         <div className="flex items-center gap-1 mt-2">
-          <span className="text-sm font-medium text-gray-700">{avgRating > 0 ? avgRating.toFixed(1) : 'New'}</span>
+          <span className="text-sm font-medium text-slate-700">{avgRating > 0 ? avgRating.toFixed(1) : 'New'}</span>
           <div className="flex items-center gap-0.5">
             {[1, 2, 3, 4, 5].map((s) => (
               <img
@@ -62,14 +62,14 @@ const CourseCard = ({ course }) => {
               />
             ))}
           </div>
-          <span className="text-xs text-gray-400">({course.courseRatings.length})</span>
+          <span className="text-xs text-slate-500">({course.courseRatings.length})</span>
         </div>
 
         {/* Price */}
         <div className="flex items-center gap-2 mt-3">
-          <span className="text-lg font-bold text-gray-900">${discountedPrice}</span>
+          <span className="text-lg font-bold text-slate-900">${discountedPrice}</span>
           {course.discount > 0 && (
-            <span className="text-sm text-gray-400 line-through">${course.coursePrice.toFixed(2)}</span>
+            <span className="text-sm text-slate-400 line-through">${course.coursePrice.toFixed(2)}</span>
           )}
         </div>
       </div>

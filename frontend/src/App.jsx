@@ -11,6 +11,11 @@ import AddCourse from './pages/prof/AddCourse'
 import MyCourses from './pages/prof/MyCourses'
 import Dashboard from './pages/prof/Dashboard'
 import StudentsEnrolled from './pages/prof/StudentsEnrolled'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+import VerifyEmail from './pages/auth/VerifyEmail'
+import ForgotPassword from './pages/auth/ForgotPassword'
+import ResetPassword from './pages/auth/ResetPassword'
 
 const App = () => {
   return (
@@ -23,6 +28,11 @@ const App = () => {
         <Route path='/my-enrollments' element={<MyEnrollments />}/>
         <Route path='/player/:courseID' element={<Player />}/>
         <Route path='/loading/:path' element={<Loading />}/>
+        <Route path='/login' element={<Login />}/>
+        <Route path='/register' element={<Register />}/>
+        <Route path='/verify-email' element={<VerifyEmail />}/>
+        <Route path='/forgot-password' element={<ForgotPassword />}/>
+        <Route path='/reset-password' element={<ResetPassword />}/>
         <Route path='/prof' element={<Prof />}>
           <Route path='' element={<Dashboard/>}/>
           <Route path='add-course' element={<AddCourse/>}/>

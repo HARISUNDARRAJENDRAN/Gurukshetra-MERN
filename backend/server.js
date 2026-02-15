@@ -25,7 +25,6 @@ app.use(
 //API ENDPOINTS
 app.get('/', (req,res) => res.send("API working"))
 app.use('/api/auth', authRouter);
-app.use('/api', authRouter);
 
 app.listen(port, () => console.log(`Server started on Port: ${port}`))
 

@@ -7,7 +7,7 @@ const Testimonials = () => {
       <div className="container-base">
         <div className="text-center mb-12">
           <span className="pill">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-800" />
             Student Voice
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-slate-900">Testimonials</h2>
@@ -20,9 +20,7 @@ const Testimonials = () => {
           {dummyTestimonial.map((item, index) => (
             <div
               key={index}
-              className={`rounded-3xl border-2 border-slate-900 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)] ${
-                index === 1 ? 'bg-[#B7FA66]' : 'bg-white'
-              }`}
+              className="rounded-3xl border-2 border-slate-900 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)]"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-0.5">

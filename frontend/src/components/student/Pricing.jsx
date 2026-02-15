@@ -9,7 +9,7 @@ const Pricing = () => {
       desc: 'Explore courses and preview content.',
       features: ['Course previews', 'Community access', 'Basic tracking'],
       cta: 'Get Started',
-      accent: false,
+      featured: false,
     },
     {
       name: 'Pro Learner',
@@ -18,7 +18,7 @@ const Pricing = () => {
       desc: 'Full access to all student courses.',
       features: ['Unlimited courses', 'Certificates', 'Priority support'],
       cta: 'Go Pro',
-      accent: true,
+      featured: true,
     },
     {
       name: 'Educator',
@@ -27,7 +27,7 @@ const Pricing = () => {
       desc: 'Publish, manage, and grow your audience.',
       features: ['Course publishing', 'Analytics', 'Revenue insights'],
       cta: 'Start Teaching',
-      accent: false,
+      featured: false,
     },
   ];
 
@@ -36,7 +36,7 @@ const Pricing = () => {
       <div className="container-base">
         <div className="text-center mb-12">
           <span className="pill">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-800" />
             Transparent
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-slate-900">Pricing & Plans</h2>
@@ -50,12 +50,12 @@ const Pricing = () => {
             <div
               key={p.name}
               className={`rounded-3xl border-2 border-slate-900 p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-card)] ${
-                p.accent ? 'bg-[#B7FA66]' : 'bg-white'
+                p.featured ? 'bg-slate-100' : 'bg-white'
               }`}
             >
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-slate-900">{p.name}</h3>
-                {p.accent && (
+                {p.featured && (
                   <span className="text-xs font-semibold px-2 py-1 rounded-full border border-slate-900 text-slate-900">Popular</span>
                 )}
               </div>
@@ -74,9 +74,9 @@ const Pricing = () => {
               </ul>
               <button
                 className={`mt-6 w-full rounded-full px-4 py-2 text-sm font-semibold transition-all ${
-                  p.accent
+                  p.featured
                     ? 'bg-slate-900 text-white hover:bg-slate-800'
-                    : 'border-2 border-slate-900 text-slate-900 hover:bg-[#B7FA66]'
+                    : 'border-2 border-slate-900 text-slate-900 hover:bg-slate-100'
                 }`}
               >
                 {p.cta}

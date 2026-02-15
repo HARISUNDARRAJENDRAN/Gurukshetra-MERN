@@ -25,7 +25,7 @@ const VerifyEmail = () => {
     setMessage(data.message || 'Request completed');
 
     if (data.success) {
-      navigate('/');
+      navigate('/offered-course');
     }
   };
 

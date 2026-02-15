@@ -20,7 +20,8 @@ const Login = () => {
     setMessage(data.message || 'Request completed');
 
     if (data.success) {
-      navigate('/');
+      const targetRoute = data.user?.isAccountVerified ? '/offered-course' : '/verify-email';
+      navigate(targetRoute);
     }
   };
 

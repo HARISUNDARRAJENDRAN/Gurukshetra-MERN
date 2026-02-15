@@ -17,12 +17,12 @@ const ProblemSolution = () => {
   ];
 
   return (
-    <section className="section bg-white relative overflow-hidden">
-      <div className="absolute -top-32 right-10 h-40 w-40 rounded-full bg-[#B7FA66]/50 blur-3xl" />
+    <section className="section bg-white relative overflow-hidden border-y border-slate-200">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_90%_15%,rgba(15,23,42,0.04)_0%,transparent_32%)]" />
       <div className="container-base">
         <div className="text-center mb-12">
           <span className="pill">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-800" />
             Why it works
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-slate-900">Problem → Solution</h2>
@@ -44,7 +44,7 @@ const ProblemSolution = () => {
               <p className="mt-3 text-slate-900 font-medium">{item.problem}</p>
               <div className="mt-5 h-px bg-slate-200" />
               <div className="mt-5 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500">
-                <span className="h-2 w-2 rounded-full bg-[#B7FA66]" />
+                <span className="h-2 w-2 rounded-full bg-slate-800" />
                 Solution
               </div>
               <p className="mt-3 text-slate-700">{item.solution}</p>

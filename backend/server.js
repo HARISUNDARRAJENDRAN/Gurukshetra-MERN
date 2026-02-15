@@ -8,6 +8,14 @@ import authRouter from "./routes/authRoutes.js";
 
 dotenv.config();
 
+const requiredEnv = ['MONGODB_URL', 'JWT_SECRET'];
+const missingEnv = requiredEnv.filter((key) => !process.env[key]);
+
+if (missingEnv.length) {
+	console.error(`Missing required environment variable(s): ${missingEnv.join(', ')}`);
+	process.exit(1);
+}
+
 const app = express();
 const port = process.env.PORT || 5000;
 connectDB();

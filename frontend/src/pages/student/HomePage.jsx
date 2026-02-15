@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import Navbar from '../../components/student/Navbar';
 import Hero from '../../components/student/Hero';
+import Footer from '../../components/student/Footer';
 
 // Lazy load below-fold sections
 const ProblemSolution = lazy(() => import('../../components/student/ProblemSolution'));
@@ -18,7 +19,7 @@ const SectionFallback = () => (
 
 const HomePage = () => {
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-100 text-slate-900">
       <Navbar />
       <Hero />
       <Suspense fallback={<SectionFallback />}>
@@ -39,6 +40,7 @@ const HomePage = () => {
       <Suspense fallback={<SectionFallback />}>
         <FinalCTA />
       </Suspense>
+      <Footer />
     </div>
   );
 };

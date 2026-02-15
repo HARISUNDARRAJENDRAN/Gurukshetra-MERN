@@ -1,4 +1,5 @@
 import { createContext, useEffect, useMemo, useState } from "react";
+import { dummyCourses } from "../assets/assets";
 
 export const AppContent = createContext();
 
@@ -8,6 +9,7 @@ export const AppContentProvider = (props)=>{
     const [user, setUser] = useState(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
+    const [enrolledCourses, setEnrolledCourses] = useState([]);
 
     const request = async (endpoint, options = {}) => {
         const response = await fetch(`${BACKEND_URL}/api/auth${endpoint}`, {
@@ -117,8 +119,39 @@ export const AppContentProvider = (props)=>{
         });
     };
 
+    const fetchUserEnrolledCourses = async () => {
+        const simulatedEnrolledCourses = dummyCourses.slice(0, 3).map((course, index) => {
+            const totalLectures = course.courseContent.reduce(
+                (sum, chapter) => sum + chapter.chapterContent.length,
+                0
+            );
+
+            const totalMinutes = course.courseContent.reduce((sum, chapter) => {
+                return sum + chapter.chapterContent.reduce(
+                    (chapterSum, lecture) => chapterSum + Number(lecture.lectureDuration || 0),
+                    0
+                );
+            }, 0);
+
+            const completedLecture = Math.min(index + 1, totalLectures);
+
+            return {
+                courseId: course._id,
+                courseTitle: course.courseTitle,
+                courseThumbnail: course.courseThumbnail,
+                duration: `${Math.max(1, Math.round(totalMinutes / 60))}h`,
+                lectureCompleted: completedLecture,
+                totalLectures,
+            };
+        });
+
+        setEnrolledCourses(simulatedEnrolledCourses);
+        return simulatedEnrolledCourses;
+    };
+
     useEffect(() => {
         checkAuth();
+        fetchUserEnrolledCourses();
     }, []);
 
     const value = useMemo(() => ({
@@ -135,7 +168,9 @@ export const AppContentProvider = (props)=>{
         verifyEmail,
         sendResetOtp,
         resetPassword,
-    }), [user, isAuthenticated, authLoading]);
+        enrolledCourses,
+        fetchUserEnrolledCourses,
+    }), [user, isAuthenticated, authLoading, enrolledCourses]);
 
     return (
         <AppContent.Provider value ={value}>

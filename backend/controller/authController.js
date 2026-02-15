@@ -17,8 +17,10 @@ const generateOtp = () => String(Math.floor(100000 + Math.random() * 900000));
 const sendMailSafely = async (mailOptions) => {
     try {
         await transporter.sendMail(mailOptions);
+        return true;
     } catch (error) {
         console.error('Mail send failed:', error.message);
+        return false;
     }
 };
 
@@ -154,12 +156,16 @@ export const sendVerifyOtp = async (req, res) => {
         user.verifyOtpExpireAt = Date.now() + 10 * 60 * 1000;
         await user.save();
 
-        await sendMailSafely({
+        const sent = await sendMailSafely({
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Verify Your Account',
             text: `Your account verification OTP is: ${otp}`,
         });
+
+        if (!sent) {
+            return res.json({ success: false, message: 'Unable to send verification OTP email. Please check SMTP configuration.' });
+        }
 
         return res.json({ success: true, message: 'Verification OTP sent to email' });
     } catch (error) {
@@ -220,12 +226,16 @@ export const sendResetOtp = async (req, res) => {
         user.resetOtpExpireAt = Date.now() + 10 * 60 * 1000;
         await user.save();
 
-        await sendMailSafely({
+        const sent = await sendMailSafely({
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
             text: `Your password reset OTP is: ${otp}`,
         });
+
+        if (!sent) {
+            return res.json({ success: false, message: 'Unable to send password reset OTP email. Please check SMTP configuration.' });
+        }
 
         return res.json({ success: true, message: 'Password reset OTP sent to email' });
     } catch (error) {

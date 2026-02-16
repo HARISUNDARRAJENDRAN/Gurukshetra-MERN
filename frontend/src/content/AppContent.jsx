@@ -10,12 +10,42 @@ export const AppContentProvider = (props)=>{
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authLoading, setAuthLoading] = useState(true);
     const [enrolledCourses, setEnrolledCourses] = useState([]);
+    const [courses, setCourses] = useState([]);
+    const [publicCourses, setPublicCourses] = useState([]);
+    const [dashboardData, setDashboardData] = useState(null);
+    const [courseRatingsMap, setCourseRatingsMap] = useState({});
 
     const request = async (endpoint, options = {}) => {
         const response = await fetch(`${BACKEND_URL}/api/auth${endpoint}`, {
             credentials: "include",
             headers: {
                 "Content-Type": "application/json",
+                ...(options.headers || {}),
+            },
+            ...options,
+        });
+
+        return response.json();
+    };
+
+    const userRequest = async (endpoint, options = {}) => {
+        const response = await fetch(`${BACKEND_URL}/api/user${endpoint}`, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(options.headers || {}),
+            },
+            ...options,
+        });
+
+        return response.json();
+    };
+
+    const courseRequest = async (endpoint, options = {}) => {
+        const response = await fetch(`${BACKEND_URL}/api/course${endpoint}`, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
                 ...(options.headers || {}),
             },
             ...options,
@@ -119,6 +149,63 @@ export const AppContentProvider = (props)=>{
         });
     };
 
+    const becomeEducator = async () => {
+        const data = await userRequest('/become-educator', { method: 'POST' });
+
+        if (data.success) {
+            await fetchMe();
+        }
+
+        return data;
+    };
+
+    const fetchEducatorCourses = async () => {
+        const data = await userRequest('/educator-courses', { method: 'GET' });
+
+        if (data.success) {
+            setCourses(data.courses || []);
+        }
+
+        return data;
+    };
+
+    const fetchDashboardData = async () => {
+        const data = await userRequest('/dashboard-data', { method: 'GET' });
+
+        if (data.success) {
+            setDashboardData(data.dashboardData || null);
+        }
+
+        return data;
+    };
+
+    const fetchPublishedCourses = async () => {
+        const data = await courseRequest('/published', { method: 'GET' });
+
+        if (data.success) {
+            setPublicCourses(data.courses || []);
+        }
+
+        return data;
+    };
+
+    const createCourse = async (payload) => {
+        const data = await courseRequest('/create', {
+            method: 'POST',
+            body: JSON.stringify(payload),
+        });
+
+        if (data.success) {
+            await Promise.all([
+                fetchEducatorCourses(),
+                fetchDashboardData(),
+                fetchPublishedCourses(),
+            ]);
+        }
+
+        return data;
+    };
+
     const fetchUserEnrolledCourses = async () => {
         const simulatedEnrolledCourses = dummyCourses.slice(0, 3).map((course, index) => {
             const totalLectures = course.courseContent.reduce(
@@ -149,15 +236,99 @@ export const AppContentProvider = (props)=>{
         return simulatedEnrolledCourses;
     };
 
+    const fetchUserCourseProgress = async (courseId) => {
+        const data = await userRequest(`/course-progress/${courseId}`, { method: 'GET' });
+
+        if (data.success) {
+            setEnrolledCourses((prev) => prev.map((course) => (
+                course.courseId === courseId
+                    ? { ...course, lectureCompleted: data.progressData.lectureCompleted }
+                    : course
+            )));
+        }
+
+        return data;
+    };
+
+    const updateCourseProgress = async ({ courseId, lectureId }) => {
+        const data = await userRequest('/course-progress', {
+            method: 'POST',
+            body: JSON.stringify({ courseId, lectureId }),
+        });
+
+        if (data.success) {
+            setEnrolledCourses((prev) => prev.map((course) => (
+                course.courseId === courseId
+                    ? { ...course, lectureCompleted: data.progressData.lectureCompleted }
+                    : course
+            )));
+        }
+
+        return data;
+    };
+
+    const fetchUserCourseRating = async (courseId) => {
+        const data = await userRequest(`/course-rating/${courseId}`, { method: 'GET' });
+
+        if (data.success && data.ratingData) {
+            const userId = user?._id || user?.id;
+            if (userId) {
+                setCourseRatingsMap((prev) => ({
+                    ...prev,
+                    [courseId]: {
+                        ...(prev[courseId] || {}),
+                        [userId]: data.ratingData.userRating || 0,
+                    },
+                }));
+            }
+        }
+
+        return data;
+    };
+
+    const updateCourseRating = async ({ courseId, userId, rating }) => {
+        if (!courseId || !userId) {
+            return { success: false, message: 'Missing course or user details' };
+        }
+
+        const data = await userRequest('/course-rating', {
+            method: 'POST',
+            body: JSON.stringify({ courseId, rating }),
+        });
+
+        if (data.success) {
+            setCourseRatingsMap((prev) => ({
+                ...prev,
+                [courseId]: {
+                    ...(prev[courseId] || {}),
+                    [userId]: data.ratingData?.userRating ?? rating,
+                },
+            }));
+        }
+
+        return data;
+    };
+
     useEffect(() => {
         checkAuth();
         fetchUserEnrolledCourses();
+        fetchPublishedCourses();
     }, []);
+
+    const isEducator = (user?.publicMetadata?.role || user?.role) === 'educator';
+
+    useEffect(() => {
+        if (isEducator) {
+            fetchEducatorCourses();
+            fetchDashboardData();
+        }
+    }, [isEducator]);
 
     const value = useMemo(() => ({
         user,
         isAuthenticated,
         authLoading,
+        isEducator,
         backendUrl: BACKEND_URL,
         register,
         login,
@@ -168,9 +339,32 @@ export const AppContentProvider = (props)=>{
         verifyEmail,
         sendResetOtp,
         resetPassword,
+        becomeEducator,
+        createCourse,
         enrolledCourses,
         fetchUserEnrolledCourses,
-    }), [user, isAuthenticated, authLoading, enrolledCourses]);
+        fetchUserCourseProgress,
+        updateCourseProgress,
+        fetchUserCourseRating,
+        updateCourseRating,
+        courseRatingsMap,
+        courses,
+        publicCourses,
+        dashboardData,
+        fetchDashboardData,
+        fetchPublishedCourses,
+        fetchEducatorCourses,
+    }), [
+        user,
+        isAuthenticated,
+        authLoading,
+        isEducator,
+        enrolledCourses,
+        courses,
+        publicCourses,
+        dashboardData,
+        courseRatingsMap,
+    ]);
 
     return (
         <AppContent.Provider value ={value}>

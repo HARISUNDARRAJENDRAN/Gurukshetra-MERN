@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import CourseCard from './CourseCard';
-import { dummyCourses } from '../../assets/assets';
+import { AppContent } from '../../content/AppContent';
 
 const CourseSection = () => {
-  const featured = dummyCourses.slice(0, 4);
+  const { publicCourses } = useContext(AppContent);
+
+  const featured = useMemo(() => publicCourses.slice(0, 4), [publicCourses]);
 
   return (
     <section className="section bg-white">
       <div className="container-base">
         <div className="mb-12 text-center">
           <span className="pill">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#B7FA66]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-800" />
             Featured
           </span>
           <h2 className="mt-4 text-3xl sm:text-4xl font-bold text-slate-900">Featured Courses</h2>
@@ -20,16 +22,22 @@ const CourseSection = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featured.map((course) => (
-            <CourseCard key={course._id} course={course} />
-          ))}
-        </div>
+        {featured.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {featured.map((course) => (
+              <CourseCard key={course._id} course={course} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center text-sm text-slate-600">
+            No published courses available yet.
+          </div>
+        )}
 
         <div className="text-center mt-10">
           <Link
             to="/offered-course"
-            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-slate-900 border-2 border-slate-900 hover:bg-[#B7FA66] rounded-full transition-all duration-200"
+            className="inline-flex items-center gap-2 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-slate-900 border-2 border-slate-900 hover:bg-slate-100 rounded-full transition-all duration-200"
           >
             View All Courses
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

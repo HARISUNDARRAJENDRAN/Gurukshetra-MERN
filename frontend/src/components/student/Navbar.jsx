@@ -1,14 +1,25 @@
 import React, { useContext } from 'react';
-import { Home, BookOpen, GraduationCap, LogIn, UserPlus, LogOut, BadgeCheck } from 'lucide-react';
+import { Home, BookOpen, GraduationCap, LogIn, UserPlus, LogOut, BadgeCheck, BriefcaseBusiness } from 'lucide-react';
 import { NavBar } from '../ui/tubelight-navbar';
 import { Link } from 'react-router-dom';
 import { AppContent } from '../../content/AppContent';
 
 const Navbar = () => {
-  const { isAuthenticated, user, logout } = useContext(AppContent);
+  const { isAuthenticated, user, isEducator, logout, becomeEducator } = useContext(AppContent);
 
   const onLogout = async () => {
     await logout();
+  };
+
+  const handleBecomeEducator = async () => {
+    const data = await becomeEducator();
+
+    if (data.success) {
+      window.alert(data.message || 'You are now an educator');
+      return;
+    }
+
+    window.alert(data.message || 'Unable to become educator');
   };
 
   const navItems = [
@@ -60,6 +71,42 @@ const Navbar = () => {
           <BadgeCheck size={14} />
           Verify
         </Link>
+      )}
+
+      {isEducator ? (
+        <>
+          <Link
+            to="/prof"
+            className="hidden sm:inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-700 transition hover:border-slate-900 hover:text-slate-900"
+          >
+            <BriefcaseBusiness size={14} />
+            Prof Dashboard
+          </Link>
+          <Link
+            to="/prof"
+            className="sm:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/70 text-slate-700 transition hover:border-slate-900 hover:text-slate-900"
+            aria-label="Prof Dashboard"
+          >
+            <BriefcaseBusiness size={16} />
+          </Link>
+        </>
+      ) : (
+        <>
+          <button
+            onClick={handleBecomeEducator}
+            className="hidden sm:inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-slate-700 transition hover:border-slate-900 hover:text-slate-900"
+          >
+            <BriefcaseBusiness size={14} />
+            Become Prof
+          </button>
+          <button
+            onClick={handleBecomeEducator}
+            className="sm:hidden inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white/70 text-slate-700 transition hover:border-slate-900 hover:text-slate-900"
+            aria-label="Become Prof"
+          >
+            <BriefcaseBusiness size={16} />
+          </button>
+        </>
       )}
 
       <button

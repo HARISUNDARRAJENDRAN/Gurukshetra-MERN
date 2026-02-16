@@ -5,6 +5,7 @@ import Footer from '../../components/student/Footer';
 
 // Lazy load below-fold sections
 const ProblemSolution = lazy(() => import('../../components/student/ProblemSolution'));
+const CourseSection = lazy(() => import('../../components/student/CourseSection'));
 const KeyFeatures = lazy(() => import('../../components/student/KeyFeatures'));
 const Outcomes = lazy(() => import('../../components/student/Outcomes'));
 const Testimonials = lazy(() => import('../../components/student/Testimonials'));
@@ -24,6 +25,9 @@ const HomePage = () => {
       <Hero />
       <Suspense fallback={<SectionFallback />}>
         <ProblemSolution />
+      </Suspense>
+      <Suspense fallback={<SectionFallback />}>
+        <CourseSection />
       </Suspense>
       <Suspense fallback={<SectionFallback />}>
         <KeyFeatures />

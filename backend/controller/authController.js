@@ -62,6 +62,8 @@ export const register = async (req, res) => {
                 id: newUser._id,
                 name: newUser.name,
                 email: newUser.email,
+                role: newUser.role,
+                publicMetadata: { role: newUser.role },
                 isAccountVerified: newUser.isAccountVerified,
             },
         });
@@ -99,6 +101,8 @@ export const login = async (req, res) => {
                 id: user._id,
                 name: user.name,
                 email: user.email,
+                role: user.role,
+                publicMetadata: { role: user.role },
                 isAccountVerified: user.isAccountVerified,
             },
         });
@@ -133,7 +137,13 @@ export const getUserData = async (req, res) => {
             return res.json({ success: false, message: 'User not found' });
         }
 
-        return res.json({ success: true, user });
+        return res.json({
+            success: true,
+            user: {
+                ...user.toObject(),
+                publicMetadata: { role: user.role },
+            },
+        });
     } catch (error) {
         return res.json({ success: false, message: error.message });
     }
